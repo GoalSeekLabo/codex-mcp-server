@@ -1,0 +1,64 @@
+{
+  "name": "codex-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server for integrating OpenAI Codex CLI with Claude Code",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "codex-mcp": "bin/codex-mcp.js",
+    "codex-mcp-setup": "bin/setup.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "codex",
+    "mcp",
+    "openai",
+    "claude",
+    "ai-assistant",
+    "model-context-protocol"
+  ],
+  "author": "Goal Seek Laboratory",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GoalSeekLabo/codex-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GoalSeekLabo/codex-mcp-server/issues"
+  },
+  "homepage": "https://github.com/GoalSeekLabo/codex-mcp-server#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.3",
+    "chalk": "^5.3.0",
+    "zod": "^3.23.5",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.5.2",
+    "@types/jest": "^29.5.5",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "files": [
+    "dist/",
+    "bin/",
+    "config/",
+    "README.md",
+    "LICENSE"
+  ],
+  "preferGlobal": true
+}

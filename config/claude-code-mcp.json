@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "codex": {
+      "command": "codex-mcp",
+      "args": [],
+      "env": {},
+      "description": "OpenAI Codex CLI integration via MCP",
+      "homepage": "https://github.com/goalseeklabs/codex-mcp-server",
+      "features": {
+        "tools": [
+          {
+            "name": "codex.exec",
+            "description": "Execute Codex CLI commands with arbitrary prompts and arguments"
+          },
+          {
+            "name": "codex.analyze", 
+            "description": "Analyze code files or directories for security, performance, and quality issues"
+          },
+          {
+            "name": "codex.fix",
+            "description": "Fix issues in code files with AI assistance"
+          },
+          {
+            "name": "codex.general",
+            "description": "Execute general Codex CLI commands with full flexibility"
+          }
+        ]
+      },
+      "requirements": {
+        "codex_cli": "OpenAI Codex CLI must be installed (npm install -g @openai/codex or brew install codex)",
+        "api_key": "OpenAI API key or ChatGPT Plus/Pro/Team/Enterprise subscription"
+      }
+    }
+  }
+}
