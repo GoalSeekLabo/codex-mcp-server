@@ -30,6 +30,21 @@ export const CodexGeneralSchema = {
   timeout: z.number().min(1000).max(300000).optional().describe("Timeout in milliseconds")
 } as const;
 
+export const CodexSearchSchema = {
+  query: z.string().describe("Search query to execute"),
+  provider: z.enum(["bing", "google", "ddg"]).optional().describe("Search provider (default: bing)"),
+  workingDirectory: z.string().optional().describe("Working directory for the command"),
+  timeout: z.number().min(1000).max(60000).optional().describe("Timeout in milliseconds (1s-1min)")
+} as const;
+
+export const CodexSearchDetailedSchema = {
+  query: z.string().describe("Search query to execute with detailed results"),
+  provider: z.enum(["bing", "google", "ddg"]).optional().describe("Search provider (default: bing)"),
+  maxPages: z.number().min(1).max(3).optional().describe("Maximum number of pages to fetch detailed content (default: 3)"),
+  workingDirectory: z.string().optional().describe("Working directory for the command"),
+  timeout: z.number().min(5000).max(120000).optional().describe("Timeout in milliseconds (5s-2min, longer for detailed search)")
+} as const;
+
 /**
  * Zod object schemas for validation
  */
@@ -37,6 +52,8 @@ export const CodexExecZodSchema = z.object(CodexExecSchema);
 export const CodexAnalyzeZodSchema = z.object(CodexAnalyzeSchema);
 export const CodexFixZodSchema = z.object(CodexFixSchema);
 export const CodexGeneralZodSchema = z.object(CodexGeneralSchema);
+export const CodexSearchZodSchema = z.object(CodexSearchSchema);
+export const CodexSearchDetailedZodSchema = z.object(CodexSearchDetailedSchema);
 
 /**
  * Type definitions exported from schemas
@@ -45,6 +62,8 @@ export type CodexExecParams = z.infer<typeof CodexExecZodSchema>;
 export type CodexAnalyzeParams = z.infer<typeof CodexAnalyzeZodSchema>;
 export type CodexFixParams = z.infer<typeof CodexFixZodSchema>;
 export type CodexGeneralParams = z.infer<typeof CodexGeneralZodSchema>;
+export type CodexSearchParams = z.infer<typeof CodexSearchZodSchema>;
+export type CodexSearchDetailedParams = z.infer<typeof CodexSearchDetailedZodSchema>;
 
 /**
  * Tool execution result schema

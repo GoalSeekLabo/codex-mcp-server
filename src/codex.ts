@@ -1,7 +1,7 @@
 import { spawn, SpawnOptions } from "node:child_process";
 import { join } from "node:path";
 import chalk from "chalk";
-import { CodexExecParams, CodexAnalyzeParams, CodexFixParams, CodexGeneralParams, ToolResult } from "./schemas.js";
+import { CodexExecParams, CodexAnalyzeParams, CodexFixParams, CodexGeneralParams, CodexSearchParams, CodexSearchDetailedParams, ToolResult } from "./schemas.js";
 
 /**
  * Codex CLI wrapper for safe command execution
@@ -85,6 +85,51 @@ export class CodexExecutor {
     const options: ExecutionOptions = {
       workingDirectory,
       timeout: timeout || this.defaultTimeout
+    };
+
+    return this.executeCommand(cmdArgs, options);
+  }
+
+  /**
+   * Execute a simple web search with Codex CLI
+   */
+  async simpleSearch(params: CodexSearchParams): Promise<ToolResult> {
+    const { query, provider = "bing", workingDirectory, timeout } = params;
+    
+    const cmdArgs = ["--enable-web", "--web-mode", "on", "exec", query];
+    
+    // Add provider configuration if not default
+    if (provider !== "bing") {
+      cmdArgs.unshift("-c", `tools.web_search.provider="${provider}"`);
+    }
+
+    const options: ExecutionOptions = {
+      workingDirectory,
+      timeout: timeout || 30000 // 30 seconds for simple search
+    };
+
+    return this.executeCommand(cmdArgs, options);
+  }
+
+  /**
+   * Execute a detailed web search with Codex CLI
+   */
+  async detailedSearch(params: CodexSearchDetailedParams): Promise<ToolResult> {
+    const { query, provider = "bing", maxPages = 3, workingDirectory, timeout } = params;
+    
+    // Use a more detailed prompt to trigger detailed search mode
+    const detailedQuery = `Search for "${query}" and provide detailed information including code examples, tutorials, or documentation. Get full content from top ${maxPages} result(s).`;
+    
+    const cmdArgs = ["--enable-web", "--web-mode", "on", "exec", detailedQuery];
+    
+    // Add provider configuration if not default
+    if (provider !== "bing") {
+      cmdArgs.unshift("-c", `tools.web_search.provider="${provider}"`);
+    }
+
+    const options: ExecutionOptions = {
+      workingDirectory,
+      timeout: timeout || 60000 // 60 seconds for detailed search
     };
 
     return this.executeCommand(cmdArgs, options);

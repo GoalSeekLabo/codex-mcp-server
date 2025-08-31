@@ -8,10 +8,14 @@ import {
   CodexAnalyzeSchema,
   CodexFixSchema,
   CodexGeneralSchema,
+  CodexSearchSchema,
+  CodexSearchDetailedSchema,
   CodexExecZodSchema,
   CodexAnalyzeZodSchema,
   CodexFixZodSchema,
   CodexGeneralZodSchema,
+  CodexSearchZodSchema,
+  CodexSearchDetailedZodSchema,
 } from "./schemas.js";
 import { codexExecutor } from "./codex.js";
 
@@ -214,6 +218,102 @@ class CodexMCPServer {
           };
         } catch (error) {
           console.error(chalk.red("Error in codex.general:"), error);
+          return {
+            isError: true,
+            content: [
+              {
+                type: "text",
+                text: `Unexpected error: ${error instanceof Error ? error.message : String(error)}`,
+              },
+            ],
+          };
+        }
+      }
+    );
+
+    // Tool: codex.search - Simple web search
+    this.server.registerTool(
+      "codex.search",
+      {
+        title: "Codex Web Search",
+        description: "Perform fast web search with structured results (title, URL, snippet)",
+        inputSchema: CodexSearchSchema,
+      },
+      async (params) => {
+        try {
+          const validatedParams = CodexSearchZodSchema.parse(params);
+          const result = await codexExecutor.simpleSearch(validatedParams);
+          
+          if (!result.success) {
+            return {
+              isError: true,
+              content: [
+                {
+                  type: "text",
+                  text: `Codex search failed: ${result.stderr || result.error || "Unknown error"}`,
+                },
+              ],
+            };
+          }
+
+          return {
+            content: [
+              {
+                type: "text",
+                text: `🔍 Web search completed (${result.duration}ms)\n\n${result.stdout || "No search results"}`,
+              },
+            ],
+          };
+        } catch (error) {
+          console.error(chalk.red("Error in codex.search:"), error);
+          return {
+            isError: true,
+            content: [
+              {
+                type: "text",
+                text: `Unexpected error: ${error instanceof Error ? error.message : String(error)}`,
+              },
+            ],
+          };
+        }
+      }
+    );
+
+    // Tool: codex.search_detailed - Detailed web search
+    this.server.registerTool(
+      "codex.search_detailed",
+      {
+        title: "Codex Detailed Web Search",
+        description: "Perform detailed web search with full page content for comprehensive analysis",
+        inputSchema: CodexSearchDetailedSchema,
+      },
+      async (params) => {
+        try {
+          const validatedParams = CodexSearchDetailedZodSchema.parse(params);
+          const result = await codexExecutor.detailedSearch(validatedParams);
+          
+          if (!result.success) {
+            return {
+              isError: true,
+              content: [
+                {
+                  type: "text",
+                  text: `Codex detailed search failed: ${result.stderr || result.error || "Unknown error"}`,
+                },
+              ],
+            };
+          }
+
+          return {
+            content: [
+              {
+                type: "text",
+                text: `🔍📄 Detailed web search completed (${result.duration}ms)\n\n${result.stdout || "No search results"}`,
+              },
+            ],
+          };
+        } catch (error) {
+          console.error(chalk.red("Error in codex.search_detailed:"), error);
           return {
             isError: true,
             content: [

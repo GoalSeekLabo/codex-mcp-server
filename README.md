@@ -20,7 +20,7 @@ Codex MCP Server は OpenAI Codex CLI と Claude Code をシームレスに統�
 ### ✨ 機能
 
 - 🚀 **グローバルインストール** - 一度インストールすれば、Claude Code のどこからでも使用可能
-- 🛠️ **4つの強力なツール** - 実行、分析、修正、汎用Codex操作
+- 🛠️ **6つの強力なツール** - 実行、分析、修正、汎用操作、Web検索対応
 - 🔒 **セキュア** - タイムアウト制御付きサンドボックス実行
 - ⚡ **高速** - 効率的なTypeScript実装
 - 🎯 **簡単セットアップ** - ワンコマンドでインストールと設定
@@ -34,6 +34,8 @@ Codex MCP Server は OpenAI Codex CLI と Claude Code をシームレスに統�
 | **codex.analyze** | コードの問題を分析 | セキュリティ監査、パフォーマンス確認、コード品質 |
 | **codex.fix** | AIアシスタンスでコードの問題を修正 | バグ修正、最適化提案、リファクタリング |
 | **codex.general** | 汎用Codex CLI操作 | カスタムコマンド、高度なワークフロー |
+| **codex.search** | 高速Web検索（構造化結果） | API仕様確認、エラー意味調査、技術情報検索 |
+| **codex.search_detailed** | 詳細Web検索（フルコンテンツ） | チュートリアル取得、実装例分析、深い技術解説 |
 
 ## 必要な環境
 
@@ -103,6 +105,16 @@ codex.fix ツールを使用して、この関数のパフォーマンス問題�
 codex.general ツールを使用してカスタムCodex操作を実行: このコードベースのアーキテクチャを説明してください
 ```
 
+#### 5. Web検索（高速）
+```
+codex.search ツールを使用して、React useEffectフックの最新ベストプラクティスを調べてください
+```
+
+#### 6. Web検索（詳細）
+```
+codex.search_detailed ツールを使用して、TypeScript genericsの詳しいチュートリアルと実装例を取得してください
+```
+
 ### ツールパラメータ
 
 #### codex.exec
@@ -139,6 +151,27 @@ codex.general ツールを使用してカスタムCodex操作を実行: この�
 {
   "command": "explain",
   "args": ["--detailed", "architecture"],
+  "workingDirectory": "/path/to/project",
+  "timeout": 60000
+}
+```
+
+#### codex.search
+```json
+{
+  "query": "React hooks useEffect best practices 2024",
+  "provider": "bing",
+  "workingDirectory": "/path/to/project",
+  "timeout": 30000
+}
+```
+
+#### codex.search_detailed
+```json
+{
+  "query": "TypeScript advanced generics tutorial examples",
+  "provider": "bing",
+  "maxPages": 3,
   "workingDirectory": "/path/to/project",
   "timeout": 60000
 }
@@ -317,6 +350,15 @@ DEBUG=codex-mcp:* codex-mcp
 **使用前に必ず [免責事項・重要な注意事項](DISCLAIMER.md) をお読みください。**
 
 ## 更新履歴
+
+### v0.2.0 (2025-08-30)
+- 🔍 **Web検索機能追加** - Codex CLIのweb search機能を統合
+- ✅ 高速検索ツール（codex.search）追加 - 構造化結果で素早い情報収集
+- ✅ 詳細検索ツール（codex.search_detailed）追加 - フルページ内容で深い分析
+- ✅ マルチプロバイダー対応（Bing、Google、DuckDuckGo）
+- ✅ 検索プロバイダー自動選択とカスタム設定対応
+- ⚡ 詳細検索デフォルトページ数最適化（3ページで最大情報取得）
+- 🛠️ 6つの強力なツールでより包括的なコーディング支援
 
 ### v0.1.0 (2025-08-30)
 - 🎉 初回リリース
